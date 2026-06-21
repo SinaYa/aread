@@ -68,7 +68,7 @@ Aread currently targets [LM Studio](https://lmstudio.ai/)'s local server. Planne
 
 ---
 
-## For the AI using this tool
+## Prompts for your AI agent
 
 If you are a **human**, paste the block below into your AI agent's system
 prompt, project rules, or CLAUDE.md. If you are an **AI**, follow these
