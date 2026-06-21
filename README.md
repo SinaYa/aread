@@ -11,15 +11,25 @@ Paste this to your AI assistant (Codex, Claude, etc.) to get started:
 use this tool (https://github.com/SinaYa/aread) to read files with less mistakes. read its readme
 ```
 
-## For humans
+## What it is
 
 A small CLI. You (or your AI) point `aread` at a file — or pasted text — and ask
 questions; a **local** model (via [LM Studio](https://lmstudio.ai/)) reads it and
 returns only the answers, saving the assistant's tokens. The file is read once
 and many questions reuse that single read.
 
-Install (Windows): run `install.bat` to build and install a standalone
-`aread.exe` (works in cmd, PowerShell, and Git Bash), open a new terminal, then:
+## Install (Windows)
+
+Two ways:
+
+1. **Download the prebuilt exe** (no Python needed) — grab `aread.exe` from the
+   [latest release](https://github.com/SinaYa/aread/releases/latest). Put it
+   somewhere on your `PATH` (or run it in place), and drop a `config.toml` next
+   to it to customize the model/endpoint.
+2. **From source** — clone this repo and run `install.bat`. It builds and
+   installs a standalone `aread.exe` that works in cmd, PowerShell, and Git Bash.
+
+Either way, open a new terminal and run:
 
 ```bat
 aread help
@@ -28,11 +38,42 @@ aread help
 Full documentation — all flags, stdin piping, capacity/limits, config, and how
 the exe is built — is in **[GUIDE.md](GUIDE.md)**.
 
+## Roadmap
+
+Aread currently targets [LM Studio](https://lmstudio.ai/)'s local server. Planned:
+
+- **vLLM support** — talk to a [vLLM](https://github.com/vllm-project/vllm)
+  backend so the same read-once/answer-many workflow runs on higher-throughput
+  local/served models.
+- **OpenAI-compatible completions endpoints** — generalize the backend so Aread
+  can point at any OpenAI-compatible `/v1` server (not just LM Studio), making
+  the model/endpoint fully pluggable via `config.toml`.
+
+## License
+
+[MIT](LICENSE) © Sina Yaqubi
+
+## The name
+
+> My primary construction was just **`a` + `read`** — a short, typeable command
+> for "read" (and a nod to **AI-read**: an AI that reads for AIs). The happy
+> accident: **`aread` is also a genuine archaic English word** (from Old English
+> *arǣdan*, used by Spenser as *areed/aread*) meaning **"to interpret, discern,
+> declare, or divine the meaning of something."** So "aread this file" literally
+> meant "make out / interpret this" centuries ago — which is exactly what the
+> tool does. I'd love to claim I planned that, but it was `a`+`read` first and
+> the archaic meaning is a perfect bonus.
+>
+> — AI Co-Author
+
+---
+
 ## For the AI using this tool
 
 If you are a **human**, paste the block below into your AI agent's system
 prompt, project rules, or CLAUDE.md. If you are an **AI**, follow these
-instructions to get the most out of this tool:
+instructions to get the most out of this tool. (If `aread` isn't installed yet,
+see **Install** above — download the release exe or build from this repo.)
 
 ```
 When you need information from a file but do not need to edit it, do NOT
@@ -98,18 +139,3 @@ ask questions, then ask each separate question as its own -t flag in a
 single `aread read` call. Don't lower the timeout -- the first question
 on a big file can take 30-60 seconds.
 ```
-
-## Roadmap
-
-Aread currently targets [LM Studio](https://lmstudio.ai/)'s local server. Planned:
-
-- **vLLM support** — talk to a [vLLM](https://github.com/vllm-project/vllm)
-  backend so the same read-once/answer-many workflow runs on higher-throughput
-  local/served models.
-- **OpenAI-compatible completions endpoints** — generalize the backend so Aread
-  can point at any OpenAI-compatible `/v1` server (not just LM Studio), making
-  the model/endpoint fully pluggable via `config.toml`.
-
-## License
-
-[MIT](LICENSE) © Sina Yaqubi
