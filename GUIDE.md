@@ -76,6 +76,20 @@ conventional home for binaries) rather than checking it in. A frozen `aread.exe`
 reads its `config.toml` from **beside the executable**, so users customize the
 model/endpoint by editing the `config.toml` next to `aread.exe`.
 
+### Automated builds (GitHub Actions)
+
+[`.github/workflows/build-exe.yml`](.github/workflows/build-exe.yml) builds the
+exe on every push to `main` and on pull requests (uploaded as a workflow
+artifact), and **publishes it to a GitHub Release when you push a version tag**:
+
+```bash
+git tag v0.1.0
+git push origin v0.1.0     # CI builds aread.exe and attaches it to the v0.1.0 release
+```
+
+The workflow uses only GitHub's first-party actions plus the preinstalled `gh`
+CLI, so the whole pipeline is plain, auditable YAML in this repo.
+
 > Running from source (no exe): you can still run `py -3 -m ai_assistant_reader.cli ...`
 > from the repo with `src` on `PYTHONPATH`. The exe is for a clean, cross-shell,
 > Python-free command.

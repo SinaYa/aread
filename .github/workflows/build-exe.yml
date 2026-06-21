@@ -1,0 +1,68 @@
+# Builds the standalone Windows aread.exe with PyInstaller.
+#
+# - On every push to main / pull request: build it and upload as a workflow
+#   artifact (so we know the build stays green and you can download it).
+# - On a version tag (vX.Y.Z): also publish it to a GitHub Release.
+# - Can also be run on demand from the Actions tab (workflow_dispatch).
+#
+# This file is part of the repo and uses only GitHub's first-party actions plus
+# the preinstalled `gh` CLI -- nothing opaque or external to audit.
+name: build-exe
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    permissions:
+      contents: write   # needed to create/upload a GitHub Release on tags
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install PyInstaller
+        run: python -m pip install --upgrade pip pyinstaller
+
+      # Mirrors build-exe.bat, but calls the CI's Python directly for
+      # determinism (build-exe.bat uses the `py` launcher for local use).
+      - name: Build aread.exe
+        run: >
+          python -m PyInstaller --onefile --console --name aread
+          --paths src --collect-submodules ai_assistant_reader
+          --distpath dist --workpath build --specpath build --noconfirm
+          aread_entry.py
+
+      - name: Stage config beside exe
+        shell: cmd
+        run: copy /Y config.toml dist\config.toml
+
+      - name: Smoke test the exe
+        run: ./dist/aread.exe --version
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: aread-windows
+          path: |
+            dist/aread.exe
+            dist/config.toml
+
+      - name: Publish to GitHub Release (tags only)
+        if: startsWith(github.ref, 'refs/tags/v')
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            --title "$GITHUB_REF_NAME" \
+            --notes "Standalone Windows aread.exe (no Python required). Place config.toml next to aread.exe to customize the model/endpoint." \
+            dist/aread.exe dist/config.toml \
+          || gh release upload "$GITHUB_REF_NAME" dist/aread.exe dist/config.toml --clobber
