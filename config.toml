@@ -1,0 +1,29 @@
+# ai-assistant-reader configuration
+#
+# Edit this file to change which model / LM Studio endpoint the reader uses.
+# You can also override any of these per-invocation with CLI flags
+# (--model, --base-url, --timeout) or environment variables
+# (AREAD_MODEL, AREAD_BASE_URL, AREAD_TIMEOUT).
+
+# Which model to ask. Two options:
+#   1. Pin a specific model id, e.g. "unsloth/gemma-4-12b-it-qat-text"
+#   2. Use "auto" to use whichever model is currently mounted/loaded in
+#      LM Studio (the first model the API reports). Handy if you prefer to
+#      just load your model of choice in the LM Studio UI.
+model = "unsloth/gemma-4-12b-it-qat-text"
+
+# LM Studio's OpenAI-compatible API base URL (the "/v1" is optional).
+base_url = "http://127.0.0.1:1234/v1"
+
+# Per-request timeout in seconds.
+timeout = 120
+
+# Sampling temperature. Keep low for faithful extraction/answering.
+temperature = 0.1
+
+# FALLBACK context window (tokens), used only to warn when a file is likely too
+# big to fit and might be silently truncated. aread first asks LM Studio for the
+# model's ACTUAL loaded context length (via its native /api/v0 endpoint), which
+# respects a context size you lowered in the UI to fit VRAM. This value is used
+# only when that auto-detection is unavailable (e.g. LM Studio not reachable).
+context_tokens = 32768

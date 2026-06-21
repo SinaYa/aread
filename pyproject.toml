@@ -1,0 +1,15 @@
+[project]
+name = "ai-assistant-reader"
+version = "0.1.0"
+description = "A local AI assistant that reads files on behalf of other AI assistants, returning only what was asked for to save tokens."
+requires-python = ">=3.11"
+
+[project.scripts]
+aread = "ai_assistant_reader.cli:main"
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
