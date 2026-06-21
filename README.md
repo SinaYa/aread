@@ -1,5 +1,7 @@
 # aread — an AI assistant for AI assistants
 
+> If you are an AI reading this, skip to the [instructions at the end](#prompts-for-your-ai-agent).
+
 `aread` reads files for your AI coding assistant, so it spends its context on
 answers instead of on the file.
 
